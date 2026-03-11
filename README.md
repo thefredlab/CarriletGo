@@ -1,34 +1,24 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# CarriletGo - l'Escala Navigator
 
-## Getting Started
+CarriletGo is a web application for the Carrilet in l'Escala, Spain. It provides an interactive map and navigation
+features for users to explore the area and find routes to places more conveniently.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+- Interactive map to explore the area and locate places.
+- Navigation tools to find optimal routes within l'Escala.
+- User-friendly interface tailored for ease of use.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## TODO
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- [ ] Integrate real-time traffic data to provide more accurate departure times.
+- [ ] Add a feature for users to save their favorite routes and locations.
+- [ ] Implement a mobile-friendly design for better usability on smartphones and tablets.
+- [ ] Add a feature for users to share their routes and locations.
+- [ ] Implement a feature for users to report issues or suggest improvements for the app.
+- [ ] Polish the UI and add more consistent styling.
+- [X] Basic place search functionality.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Disclaimer
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+This project is not affiliated with <i>Moventis Carrilets Turístics</i> in l'Escala.
