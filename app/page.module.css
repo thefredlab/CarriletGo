@@ -1,0 +1,35 @@
+.mapContainer {
+    height: 100vh;
+    overflow: hidden;
+}
+
+.sidebarContainer {
+    position: absolute;
+    top: 1em;
+    left: 1em;
+    z-index: 1;
+    width: fit-content;
+    height: fit-content;
+}
+
+.navigatorContainer {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    top: 1em;
+    left: 50%;
+    z-index: 1;
+    width: fit-content;
+    height: fit-content;
+    transform: translateX(-50%);
+}
+
+.mapStyleContainer {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    z-index: 1;
+    width: fit-content;
+    height: fit-content;
+}

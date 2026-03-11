@@ -1,0 +1,60 @@
+.mapStyles {
+    display: flex;
+    flex-direction: row;
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    color: black;
+    padding: 0.5em;
+    border-radius: 4em;
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    position: relative;
+}
+
+.mapStyle {
+    padding: 0.5em 1em;
+    border-radius: 4em;
+    z-index: 3;
+    position: relative;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.mapStyle.active {
+    font-weight: bold;
+}
+
+.selectedBG {
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 0;
+    width: 22%;
+    height: calc(100% - 1em);
+    border-radius: 4em;
+    background: rgba(225, 225, 225, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(10px) saturate(200%);
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(-50%);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.selectedBGBorder {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    z-index: 4;
+    pointer-events: none;
+    border-radius: inherit;
+    transform: translateY(-50%);
+    backdrop-filter: blur(0.05em);
+    border: 1.5px solid rgba(225, 225, 225, 0.6);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3),
+    inset 0 0 20px rgba(255, 255, 255, 0.2);
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
