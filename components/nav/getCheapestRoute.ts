@@ -1,7 +1,7 @@
 import { Stop } from "@/data/stops";
+
 import stops from "@/data/stops";
 import lines from "@/data/lines";
-import getStopID from "@/data/getStopID";
 
 /**
  * Calculate Euclidean distance between two coordinate pairs.

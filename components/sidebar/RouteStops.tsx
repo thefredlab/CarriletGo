@@ -77,7 +77,7 @@ export default function RouteStops({
                                             0 ? (
                                                 departureTimes.formatted
                                                     .slice(0, 6)
-                                                    .map((time, i) => (
+                                                    .map((time) => (
                                                         <span key={time}>
                                                             {time}
                                                         </span>
