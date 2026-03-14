@@ -8,6 +8,7 @@ import createUserLocationMarking from "@/components/map/createUserLocationMarkin
 import createStopMarkings from "@/components/map/createStopMarkings";
 import drawRoute from "@/components/map/drawRoute";
 import MapStyleSwitch from "@/components/map/MapStyleSwitch";
+import deleteRoute from "@/components/map/deleteRoute";
 
 // Sidebar component
 import Sidebar from "@/components/sidebar/Sidebar";
@@ -16,17 +17,24 @@ import Sidebar from "@/components/sidebar/Sidebar";
 import getNearestStop from "@/components/nav/getNearestStop";
 import getCheapestRoute from "@/components/nav/getCheapestRoute";
 
+// Other components
+import PopUp from "@/components/PopUp";
+
+// Utils
+import useWindowSize from "@/utils/useWindowSize";
+
 // Style
 import styles from "./page.module.css";
 
 // Import mapbox
+import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import deleteRoute from "@/components/map/deleteRoute";
-import PopUp from "@/components/PopUp";
 
 export default function Page() {
     const mapContainer = useRef<HTMLDivElement>(null),
         [mapStyle, setMapStyle] = useState<string>("standard");
+
+    const windowSize = useWindowSize();
 
     // Navigation
     const [start, setStart] = useState<any>(null),
@@ -69,6 +77,41 @@ export default function Page() {
             lng: userLocation.lng.toString()
         });
     }, [mapContainer.current]);
+
+    useEffect(() => {
+        if (!map || !windowSize?.width) return;
+
+        /*
+        There are two containers both containing the logo and all position containers (top-left, top-right, bottom-left, bottom-right).
+        One container contains a lighter colored logo, and the other one contains a darker colored logo.
+        Both are used at the same time. Meaning, we have to move both logos.
+         */
+        const containers = document.querySelectorAll(
+            ".mapboxgl-control-container"
+        );
+
+        containers.forEach((container) => {
+            const logoElement = container.querySelector(
+                ".mapboxgl-ctrl"
+            ) as HTMLElement;
+
+            if (!logoElement || !windowSize?.width) return;
+
+            const bottomContainer = container.querySelector(
+                    ".mapboxgl-ctrl-bottom-right"
+                ),
+                topContainer = container.querySelector(
+                    ".mapboxgl-ctrl-top-left"
+                );
+
+            const newContainer =
+                windowSize.width < 700 ? topContainer : bottomContainer;
+
+            if (newContainer && logoElement.parentElement !== newContainer) {
+                newContainer.appendChild(logoElement);
+            }
+        });
+    }, [windowSize]);
 
     useEffect(() => {
         if (!map) {

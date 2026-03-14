@@ -33,3 +33,15 @@
     width: fit-content;
     height: fit-content;
 }
+
+/* Mobile */
+@media (max-width: 699px) {
+    .sidebarContainer {
+        top: unset;
+        left: 0;
+        bottom: 0em;
+
+        width: 100vw;
+        max-height: 33vh;
+    }
+}

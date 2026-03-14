@@ -7,6 +7,8 @@
     min-width: fit-content;
     max-width: 22vw;
 
+    overflow-y: auto;
+
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(20px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.3);
@@ -197,6 +199,34 @@
 .routeStopTimetable span:first-of-type {
     color: rgba(0, 0, 0, 0.75);
     font-weight: bold;
+}
+
+/* Mobile */
+@media (max-width: 699px) {
+    .sidebar {
+        position: absolute;
+
+        width: 66vw;
+        min-width: unset;
+        max-width: unset;
+
+        max-height: 33vh;
+
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 1em;
+    }
+
+    .searchField {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        max-width: calc(100vw - 2em);
+        width: calc(100vw - 2em);
+    }
 }
 
 /* Animation */
