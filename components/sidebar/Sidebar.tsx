@@ -26,9 +26,9 @@ export default function Sidebar({
     errorMessage: string;
 }) {
     const [searchResults, setSearchResults] = useState<any[]>([]),
-        [startLocationConfirmed, setStartLocationConfirmed] =
+        [_startLocationConfirmed, setStartLocationConfirmed] =
             useState<boolean>(true),
-        [destinationConfirmed, setDestinationConfirmed] =
+        [_destinationConfirmed, setDestinationConfirmed] =
             useState<boolean>(false),
         [activeSearch, setActiveSearch] = useState<
             "start" | "destination" | null
