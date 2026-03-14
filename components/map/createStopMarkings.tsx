@@ -110,8 +110,8 @@ export default function createStopMarkings(
                                 ))
                             ) : (
                                 <p className={styles.noTimetable}>
-                                    Sorry, we couldn't find any departures for
-                                    this stop. Please try again later.
+                                    Sorry, we couldn&apos;t find any departures
+                                    for this stop. Please try again later.
                                 </p>
                             )}
                         </div>
@@ -138,9 +138,7 @@ export default function createStopMarkings(
                                     className={styles.button}
                                     onClick={() =>
                                         setDestination({
-                                            name:
-                                                stop.customName ||
-                                                stop.customName,
+                                            name: stop.customName || stop.name,
                                             address: {},
                                             lat: stop.location.lat,
                                             lng: stop.location.lng
