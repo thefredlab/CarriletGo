@@ -39,7 +39,8 @@ export default function Sidebar({
 
     const prevDestinationInputValueRef = useRef<string>(""),
         prevStartInputValueRef = useRef<string>(""),
-        debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+        debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null),
+        directionSwapIconRef = useRef<SVGSVGElement>(null);
 
     // Clean up timer on unmount
     useEffect(() => {
@@ -206,19 +207,33 @@ export default function Sidebar({
     }
 
     function switchStartAndDestination() {
+        if (directionSwapIconRef.current) {
+            directionSwapIconRef.current.classList.add(styles.active);
+
+            setTimeout(() => {
+                if (directionSwapIconRef.current) {
+                    directionSwapIconRef.current.classList.remove(
+                        styles.active
+                    );
+                }
+            }, 250);
+        }
+
         const currentStart = start,
             currentDestination = destination;
 
         setStart(currentDestination);
         setDestination(currentStart);
 
-        startInputRef.current!.value = currentDestination
-            ? currentDestination.name || "Unknown Place"
-            : "";
+        setTimeout(() => {
+            startInputRef.current!.value = currentDestination
+                ? currentDestination.name || "Unknown Place"
+                : "";
 
-        destinationInputRef.current!.value = currentStart
-            ? currentStart.name || "Unknown Place"
-            : "";
+            destinationInputRef.current!.value = currentStart
+                ? currentStart.name || "Unknown Place"
+                : "";
+        }, 125);
     }
 
     return (
@@ -250,7 +265,11 @@ export default function Sidebar({
                         className={styles.directionSwap}
                         onClick={switchStartAndDestination}
                     >
-                        <ArrowDownUp size={"2em"} />
+                        <ArrowDownUp
+                            size={"2em"}
+                            className={styles.directionSwapIcon}
+                            ref={directionSwapIconRef}
+                        />
                     </div>
                 </div>
 
@@ -289,6 +308,17 @@ export default function Sidebar({
                         currentRoute={currentRoute}
                         searchResults={searchResults}
                     />
+                </div>
+
+                <div className={styles.note}>
+                    <span>Made by The Fred Lab &#8226; </span>
+                    <a
+                        href="https://github.com/thefredlab/CarriletGo"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        GitHub
+                    </a>
                 </div>
             </div>
         </>

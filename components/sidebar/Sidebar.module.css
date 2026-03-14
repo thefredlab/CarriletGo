@@ -47,6 +47,10 @@
     border-radius: 0.1em;
 }
 
+.searchField::placeholder {
+    color: rgba(0, 0, 0, 0.5);
+}
+
 .searchFieldLabel {
     display: block;
     font-size: 1.2em;
@@ -61,19 +65,25 @@
     justify-content: center;
     bottom: -2em;
     right: -0.6em;
-    background: #b1b1b1;
     padding: 0.75em;
-    border-radius: 100%;
     cursor: pointer;
-    transition: background 0.2s ease;
+
+    border-radius: 4em;
+    background: rgba(225, 225, 225, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(10px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    transition: background 0.2s, box-shadow 0.2s;
 }
 
 .directionSwap:hover {
-    background: #999999;
+    background: rgba(225, 225, 225, 0.6);
 }
 
-.directionSwapIcon.animate > svg {
-    transform: rotate(180deg);
+.directionSwapIcon.active {
+    animation: spin 0.5s linear infinite;
 }
 
 .errorMessage {
@@ -152,6 +162,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.5em;
+    margin-bottom: 1em;
 }
 
 .routeStop {
@@ -199,6 +210,18 @@
 .routeStopTimetable span:first-of-type {
     color: rgba(0, 0, 0, 0.75);
     font-weight: bold;
+}
+
+/* Made by ... note */
+.note {
+    font-size: 0.8em;
+    color: rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+/* GitHub link */
+.note a:hover {
+    text-decoration: underline;
 }
 
 /* Mobile */

@@ -39,7 +39,7 @@
     .sidebarContainer {
         top: unset;
         left: 0;
-        bottom: 0em;
+        bottom: 0;
 
         width: 100vw;
         max-height: 33vh;
