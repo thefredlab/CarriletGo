@@ -258,7 +258,7 @@ export default function Sidebar({
                         placeholder={"Where from?"}
                         onChange={startInputChange}
                         ref={startInputRef}
-                        defaultValue={start?.name || ""}
+                        defaultValue={start?.name}
                     />
 
                     <div
@@ -287,7 +287,7 @@ export default function Sidebar({
                         placeholder={"Where to?"}
                         onChange={destinationInputChange}
                         ref={destinationInputRef}
-                        defaultValue={destination?.name || ""}
+                        defaultValue={destination?.name}
                     />
                 </div>
 
