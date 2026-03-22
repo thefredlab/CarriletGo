@@ -25,8 +25,12 @@
     transform: translateX(-50%);
 }
 
-.mapStyleContainer {
+.topRightContainer {
     position: absolute;
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+
     top: 1em;
     right: 1em;
     z-index: 1;

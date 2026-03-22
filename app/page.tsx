@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 
 // Map components
 import createMapInstance from "@/components/map/createMapInstance";
-import createUserLocationWatcher from "@/components/map/createUserLocationWatcher";
 import createUserLocationMarking from "@/components/map/createUserLocationMarking";
 import createStopMarkings from "@/components/map/createStopMarkings";
 import drawRoute from "@/components/map/drawRoute";
@@ -18,6 +17,7 @@ import getNearestStop from "@/components/nav/getNearestStop";
 import getCheapestRoute from "@/components/nav/getCheapestRoute";
 
 // Other components
+import UserLocationButton from "@/components/UserLocationButton";
 import PopUp from "@/components/PopUp";
 
 // Utils
@@ -29,6 +29,7 @@ import styles from "./page.module.css";
 // Import mapbox
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import getStopByID from "@/data/getStopByID";
 
 export default function Page() {
     const mapContainer = useRef<HTMLDivElement>(null),
@@ -60,15 +61,6 @@ export default function Page() {
 
         // @ts-expect-error Already checked above
         setMap(createMapInstance(mapContainer));
-        createUserLocationWatcher(setUserLocation);
-
-        // set location manually for development purposes
-        if (process.env.NODE_ENV === "development") {
-            setUserLocation({
-                lat: 42.11026734232309,
-                lng: 3.1427786229270978
-            });
-        }
 
         if (userLocation.lat && userLocation.lng) {
             setStart({
@@ -241,7 +233,8 @@ export default function Page() {
             {/*<div className={styles.navigatorContainer}>*/}
             {/*    <Navigator />*/}
             {/*</div>*/}
-            <div className={styles.mapStyleContainer}>
+            <div className={styles.topRightContainer}>
+                <UserLocationButton setUserLocation={setUserLocation} userLocation={userLocation} />
                 <MapStyleSwitch setMapStyle={setMapStyle} />
             </div>
 

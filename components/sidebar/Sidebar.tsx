@@ -4,6 +4,8 @@ import { ArrowDownUp } from "lucide-react";
 import SearchResults from "@/components/sidebar/SearchResults";
 import RouteStops from "@/components/sidebar/RouteStops";
 
+import getStopByID from "@/data/getStopByID";
+
 import autoCompleteAddress from "@/utils/autoCompleteAddress";
 
 import styles from "./Sidebar.module.css";
@@ -49,6 +51,22 @@ export default function Sidebar({
                 clearTimeout(debounceTimerRef.current);
         };
     }, []);
+
+    useEffect(() => {
+        const currentStart = start;
+
+        if (!userLocation.lat && !userLocation.lng && currentStart?.name === "My Location") {
+            if (currentRoute.length > 0) {
+                currentStart.name = getStopByID(currentRoute[0]).name;
+
+                setStart(currentStart);
+
+                if (startInputRef.current)
+                    startInputRef.current.value = currentStart.name;
+            } else
+                setStart(null);
+        }
+    }, [userLocation]);
 
     function searchInputChange(e: React.ChangeEvent<HTMLInputElement>, type: "start" | "destination") {
         const inputValue = e.target.value,
@@ -112,41 +130,27 @@ export default function Sidebar({
     function clickedSearchResult(type: "start" | "destination", result: any) {
         setSearchResults([]);
 
-        if (type === "destination") {
-            setDestinationConfirmed(true);
-            setDestination({
+        const inputRef = type === "start" ? startInputRef : destinationInputRef,
+            setData = type === "start" ? setStart : setDestination;
+
+        if (result.name === "My Location") {
+            setData({
+                lat: userLocation.lat,
+                lng: userLocation.lng,
+                name: "My Location"
+            });
+        } else {
+            setData({
                 lat: result.lat,
                 lng: result.lng,
                 name: result.name,
                 address: result.address
             });
+        }
 
-            if (destinationInputRef.current) {
-                destinationInputRef.current.value =
-                    result.name || result.address.road || "Unknown Place";
-            }
-        } else {
-            setStartLocationConfirmed(true);
-
-            if (startInputRef.current?.value.trim() == "My Location") {
-                setStart({
-                    lat: userLocation.lat,
-                    lng: userLocation.lng,
-                    name: "My Location"
-                });
-            } else {
-                setStart({
-                    lat: result.lat,
-                    lng: result.lng,
-                    name: result.name,
-                    address: result.address
-                });
-
-                if (startInputRef.current) {
-                    startInputRef.current.value =
-                        result.name || result.address.road || "Unknown Place";
-                }
-            }
+        if (inputRef.current) {
+            inputRef.current.value =
+                result.name || result.address.road || "Unknown Place";
         }
     }
 
@@ -201,6 +205,20 @@ export default function Sidebar({
                         id={"start-location-input"}
                         placeholder={"Where from?"}
                         onChange={(e) => searchInputChange(e, "start")}
+                        onFocus={() => {
+                            if (userLocation.lat && userLocation.lng) {
+                                setActiveSearch("start");
+                                setSearchResults([{
+                                    name: "My Location",
+                                    lat: userLocation.lat.toString(),
+                                    lon: userLocation.lng.toString()
+                                }]);
+                            }
+                        }}
+                        onBlur={() => {
+                            if (searchResults.length === 1 && searchResults[0].name === "My Location")
+                                setTimeout(() => setSearchResults([]), 200);
+                        }}
                         ref={startInputRef}
                         defaultValue={start?.name}
                     />
@@ -230,6 +248,20 @@ export default function Sidebar({
                         id={"end-location-input"}
                         placeholder={"Where to?"}
                         onChange={(e) => searchInputChange(e, "destination")}
+                        onFocus={() => {
+                            if (userLocation.lat && userLocation.lng) {
+                                setActiveSearch("destination");
+                                setSearchResults([{
+                                    name: "My Location",
+                                    lat: userLocation.lat.toString(),
+                                    lon: userLocation.lng.toString()
+                                }]);
+                            }
+                        }}
+                        onBlur={() => {
+                            if (searchResults.length === 1 && searchResults[0].name === "My Location")
+                                setTimeout(() => setSearchResults([]), 200);
+                        }}
                         ref={destinationInputRef}
                         defaultValue={destination?.name}
                     />
