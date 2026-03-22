@@ -128,7 +128,9 @@ export default function Page() {
             createUserLocationMarking(map, userLocation)();
 
             // Set the map center to the user location
-            map.flyTo({ center: [userLocation.lng, userLocation.lat] });
+            if (userLocation.lat && userLocation.lng) {
+                map.flyTo({ center: [userLocation.lng, userLocation.lat] });
+            }
         });
 
         map.on("style.load", () => {
