@@ -1,4 +1,5 @@
 import createUserLocationWatcher from "@/components/map/createUserLocationWatcher";
+import isCoordsInMapBounds from "@/utils/isCoordsInMapBounds";
 
 import { Locate, LocateFixed, LocateOff } from "lucide-react";
 
@@ -26,6 +27,8 @@ export default function UserLocationButton({ setUserLocation, userLocation }: {
                     lat: 42.11026734232309,
                     lng: 3.1427786229270978
                 });
+
+                setWatchID(80085);
             } else {
                 const [lat, lng] = coords.split(",").map(Number);
 
@@ -34,9 +37,13 @@ export default function UserLocationButton({ setUserLocation, userLocation }: {
                 );
 
                 setUserLocation({ lat, lng });
-            }
 
-            setWatchID(80085);
+                if (!isCoordsInMapBounds({ lat, lng })) {
+                    setUserLocation({ lat: 0, lng: 0 });
+                    alert("Coords are outside of bounds. Disabling location features. Setting userLocation to 0, 0");
+                } else
+                    setWatchID(80085);
+            }
         } else {
             buttonRef.current?.classList.add(styles.searching);
             setWatchID(createUserLocationWatcher(setUserLocation, handleWatcherPermissionChange));

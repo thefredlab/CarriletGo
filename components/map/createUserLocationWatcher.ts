@@ -1,3 +1,5 @@
+import isCoordsInMapBounds from "@/utils/isCoordsInMapBounds";
+
 import type React from "react";
 
 /**
@@ -21,10 +23,15 @@ export default function createUserLocationWatcher(
 
     return navigator.geolocation.watchPosition(
         (position) => {
-            setUserLocation({
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-            });
+            if (!isCoordsInMapBounds({ lat: position.coords.latitude, lng: position.coords.longitude })) {
+                alert("You're outside of our bounds. Please move near L'Escala to use this feature. To ensure a better experience we've deactivated location features until you're inside our bounds.\n\nTip: If the location icon top-right is blinking, your location is still being watched and the features will turn on automatically.");
+                setUserLocation({ lat: 0, lng: 0 });
+            } else {
+                setUserLocation({
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                });
+            }
 
             onPermissionChange?.("granted");
         },
