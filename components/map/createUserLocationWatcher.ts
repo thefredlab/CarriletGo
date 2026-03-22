@@ -27,8 +27,8 @@ export default function createUserLocationWatcher(
         (position) => {
             const isInBounds = isCoordsInMapBounds({ lat: position.coords.latitude, lng: position.coords.longitude });
 
-            if (wasInBounds && !isInBounds) {
-                alert("You're outside of our bounds. Please move near L'Escala to use this feature. To ensure a better experience we've deactivated location features until you're inside our bounds.\n\nTip: If the location icon top-right is blinking, your location is still being watched and the features will turn on automatically.");
+            if (!isInBounds) {
+                if (wasInBounds) alert("You're outside of our bounds. Please move near L'Escala to use this feature. To ensure a better experience we've deactivated location features until you're inside our bounds.\n\nTip: If the location icon top-right is blinking, your location is still being watched and the features will turn on automatically.");
                 setUserLocation({ lat: 0, lng: 0 });
             } else {
                 setUserLocation({
