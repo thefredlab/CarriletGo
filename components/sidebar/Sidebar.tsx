@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { ArrowDownUp } from "lucide-react";
+import { ArrowDownUp, ChevronUp } from "lucide-react";
 
 import SearchResults from "@/components/sidebar/SearchResults";
 import RouteStops from "@/components/sidebar/RouteStops";
@@ -7,6 +7,7 @@ import RouteStops from "@/components/sidebar/RouteStops";
 import getStopByID from "@/data/getStopByID";
 
 import autoCompleteAddress from "@/utils/autoCompleteAddress";
+import useWindowSize from "@/utils/useWindowSize";
 
 import styles from "./Sidebar.module.css";
 
@@ -31,6 +32,12 @@ export default function Sidebar({
         [activeSearch, setActiveSearch] = useState<
             "start" | "destination" | null
         >(null);
+
+    const windowSize = useWindowSize(),
+        wasCollapsed = useRef(false);
+
+    const sidebarRef = useRef<HTMLDivElement>(null),
+        headerRef = useRef<HTMLDivElement>(null);
 
     const startInputRef = useRef<HTMLInputElement>(null),
         destinationInputRef = useRef<HTMLInputElement>(null);
@@ -63,6 +70,22 @@ export default function Sidebar({
                 setStart(null);
         }
     }, [userLocation]);
+
+    useEffect(() => {
+        if (!windowSize.width) return;
+
+        const sidebar = sidebarRef.current,
+            header = headerRef.current;
+
+        if (!sidebar || !header) return;
+
+        if (!wasCollapsed.current && windowSize.width < 700) {
+            sidebar.classList.add(styles.collapsed);
+            wasCollapsed.current = true;
+        }
+
+        sidebar.style.setProperty("--header-height", `${header.clientHeight}px`);
+    }, [windowSize]);
 
     function searchInputChange(e: React.ChangeEvent<HTMLInputElement>, type: "start" | "destination") {
         const inputValue = e.target.value,
@@ -180,12 +203,28 @@ export default function Sidebar({
         }, 125);
     }
 
+    function handleHeaderClick() {
+        if (!windowSize.width || !sidebarRef.current) return;
+
+        if (windowSize.width < 700) {
+            sidebarRef.current.classList.toggle(styles.collapsed);
+        } else {
+            sidebarRef.current.classList.remove(styles.collapsed);
+        }
+    }
+
     return (
         <>
-            <div className={styles.sidebar}>
-                <div className={styles.logo}>
-                    <h1>CarriletGo</h1>
-                    <span>BETA</span>
+            <div className={styles.sidebar} ref={sidebarRef}>
+                <div className={styles.header} ref={headerRef} onClick={handleHeaderClick}>
+                    <div className={styles.logo}>
+                        <h1>CarriletGo</h1>
+                        <span>BETA</span>
+                    </div>
+
+                    <div className={styles.button}>
+                        <ChevronUp className={styles.collapseIcon} />
+                    </div>
                 </div>
 
                 <div className={styles.searchFieldContainer}>

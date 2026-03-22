@@ -16,11 +16,46 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
+/* Header */
+.header {
+    display: flex;
+    width: 100%;
+    margin-bottom: 2em;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .logo {
     display: flex;
     width: fit-content;
-    margin: 0 auto 2em;
+    margin: 0 auto;
+    user-select: none;
 }
+
+.button {
+    display: none;
+    width: 3em;
+    height: 3em;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 4em;
+    background: rgba(225, 225, 225, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(10px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    transition: background 0.2s, box-shadow 0.2s;
+}
+
+.collapseIcon {
+    width: 2em;
+    height: 2em;
+    cursor: pointer;
+}
+/* Header end */
 
 .searchFieldContainer {
     position: relative;
@@ -229,24 +264,55 @@
     .sidebar {
         position: absolute;
 
-        width: 66vw;
+        width: 90vw;
         min-width: unset;
         max-width: unset;
 
-        max-height: 33vh;
+        height: calc(100dvh - 7em);
 
         left: 50%;
         transform: translateX(-50%);
         bottom: 1em;
+        transition: height 0.3s ease, background 0.3s ease, width 0.3s ease;
+    }
+
+    .sidebar:not(.collapsed) {
+        background: rgba(255, 255, 255, 0.8);
+    }
+
+    .sidebar.collapsed {
+        width: 66vw;
+        height: calc(var(--header-height, 5em) + 3em);
+    }
+
+    .sidebar:not(.collapsed) .collapseIcon {
+        transform: rotate(180deg);
+    }
+
+    .header {
+        cursor: pointer;
+    }
+
+    .logo {
+        margin: unset;
+    }
+
+    .collapseIcon {
+        transition: transform 0.3s ease;
     }
 
     .searchField {
         max-width: 100%;
     }
+
+    .button {
+        display: flex;
+    }
 }
 
 @media (max-width: 480px) {
-    .sidebar {
+    .sidebar,
+    .sidebar.collapsed {
         max-width: calc(100vw - 2em);
         width: calc(100vw - 2em);
     }
