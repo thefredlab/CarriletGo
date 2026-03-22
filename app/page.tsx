@@ -29,7 +29,6 @@ import styles from "./page.module.css";
 // Import mapbox
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import getStopByID from "@/data/getStopByID";
 
 export default function Page() {
     const mapContainer = useRef<HTMLDivElement>(null),
