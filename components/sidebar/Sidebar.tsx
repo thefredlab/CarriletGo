@@ -50,18 +50,21 @@ export default function Sidebar({
         };
     }, []);
 
-    function startInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-        const inputValue = e.target.value;
+    function searchInputChange(e: React.ChangeEvent<HTMLInputElement>, type: "start" | "destination") {
+        const inputValue = e.target.value,
+            prevInputValueRef = type === "start" ? prevStartInputValueRef : prevDestinationInputValueRef;
 
-        setActiveSearch("start");
+        setActiveSearch(type);
 
-        const resultsWithUserLocation = [
-            {
+        const searchResults: any[] = [];
+
+        if (userLocation.lat && userLocation.lng) {
+            searchResults.push({
                 name: "My Location",
                 lat: userLocation.lat.toString(),
                 lon: userLocation.lng.toString()
-            }
-        ];
+            });
+        }
 
         // Clear any existing debounce timer
         if (debounceTimerRef.current) {
@@ -71,24 +74,24 @@ export default function Sidebar({
 
         // If input is too short, clear results and update previous value
         if (inputValue.trim().length < 3) {
-            prevStartInputValueRef.current = inputValue;
-            setSearchResults(resultsWithUserLocation);
+            prevInputValueRef.current = inputValue;
+            setSearchResults(searchResults);
+
             return;
         }
 
-        // Start debounce timer (1.5s)
         debounceTimerRef.current = setTimeout(() => {
-            if (inputValue.trim() === prevStartInputValueRef.current.trim())
+            if (inputValue.trim() === prevInputValueRef.current.trim())
                 return;
 
             autoCompleteAddress(
                 inputValue,
-                { lat: userLocation.lat, lng: userLocation.lng }, // Use actual user location here
+                { lat: userLocation.lat, lng: userLocation.lng },
                 (results) => {
-                    resultsWithUserLocation.push(...results);
+                    searchResults.push(...results);
 
                     setSearchResults(
-                        resultsWithUserLocation.map((result) => {
+                        searchResults.map((result) => {
                             return {
                                 name: result.name,
                                 // @ts-ignore TODO: FIX THIS
@@ -102,66 +105,7 @@ export default function Sidebar({
             );
 
             // Update previous settled value
-            prevStartInputValueRef.current = inputValue;
-        }, 1000);
-    }
-
-    function destinationInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-        const inputValue = e.target.value;
-
-        setActiveSearch("destination");
-
-        const resultsWithUserLocation = [
-            {
-                name: "My Location",
-                lat: userLocation.lat.toString(),
-                lon: userLocation.lng.toString()
-            }
-        ];
-
-        // Clear any existing debounce timer
-        if (debounceTimerRef.current) {
-            clearTimeout(debounceTimerRef.current);
-            debounceTimerRef.current = null;
-        }
-
-        // If input is too short, clear results and update previous value
-        if (inputValue.trim().length < 3) {
-            prevDestinationInputValueRef.current = inputValue;
-            setSearchResults(resultsWithUserLocation);
-            return;
-        }
-
-        // Start debounce timer (1.5s)
-        debounceTimerRef.current = setTimeout(() => {
-            if (
-                inputValue.trim() ===
-                prevDestinationInputValueRef.current.trim()
-            )
-                return;
-
-            autoCompleteAddress(
-                inputValue,
-                { lat: userLocation.lat, lng: userLocation.lng }, // Use actual user location here
-                (results) => {
-                    resultsWithUserLocation.push(...results);
-
-                    setSearchResults(
-                        resultsWithUserLocation.map((result) => {
-                            return {
-                                name: result.name,
-                                // @ts-ignore TODO: FIX THIS
-                                address: result.address,
-                                lat: result.lat,
-                                lng: result.lon
-                            };
-                        })
-                    );
-                }
-            );
-
-            // Update previous settled value
-            prevDestinationInputValueRef.current = inputValue;
+            prevInputValueRef.current = inputValue;
         }, 1000);
     }
 
@@ -256,7 +200,7 @@ export default function Sidebar({
                         className={styles.searchField}
                         id={"start-location-input"}
                         placeholder={"Where from?"}
-                        onChange={startInputChange}
+                        onChange={(e) => searchInputChange(e, "start")}
                         ref={startInputRef}
                         defaultValue={start?.name}
                     />
@@ -285,7 +229,7 @@ export default function Sidebar({
                         className={styles.searchField}
                         id={"end-location-input"}
                         placeholder={"Where to?"}
-                        onChange={destinationInputChange}
+                        onChange={(e) => searchInputChange(e, "destination")}
                         ref={destinationInputRef}
                         defaultValue={destination?.name}
                     />
