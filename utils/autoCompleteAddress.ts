@@ -23,6 +23,11 @@ export default function autoCompleteAddress(
     userLocation: { lat: number; lng: number },
     callback: (results: OSMResult[]) => void
 ) {
+    if (userLocation.lat === 0 && userLocation.lng === 0 || !userLocation.lat || !userLocation.lng) {
+        userLocation.lat = 42.1197584;
+        userLocation.lng = 3.143246;
+    }
+
     const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
         `${input} ${userLocation.lat}, ${userLocation.lng}`
     )}&countrycodes=ES&format=jsonv2&addressdetails=1&boundingbox=42.1,3.1,42.14,3.2&limit=5`;

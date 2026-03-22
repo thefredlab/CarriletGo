@@ -70,12 +70,14 @@ export default function Page() {
             });
         }
 
-        setStart({
-            name: "My Location",
-            address: {},
-            lat: userLocation.lat.toString(),
-            lng: userLocation.lng.toString()
-        });
+        if (userLocation.lat && userLocation.lng) {
+            setStart({
+                name: "My Location",
+                address: {},
+                lat: userLocation.lat.toString(),
+                lng: userLocation.lng.toString()
+            });
+        }
     }, [mapContainer.current]);
 
     useEffect(() => {
