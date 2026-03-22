@@ -85,6 +85,7 @@ export default function Sidebar({
         }
 
         sidebar.style.setProperty("--header-height", `${header.clientHeight}px`);
+        sidebar.classList.remove(styles.loading);
     }, [windowSize]);
 
     function searchInputChange(e: React.ChangeEvent<HTMLInputElement>, type: "start" | "destination") {
@@ -215,7 +216,7 @@ export default function Sidebar({
 
     return (
         <>
-            <div className={styles.sidebar} ref={sidebarRef}>
+            <div className={[styles.sidebar, styles.loading].join(" ")} ref={sidebarRef}>
                 <div className={styles.header} ref={headerRef} onClick={handleHeaderClick}>
                     <div className={styles.logo}>
                         <h1>CarriletGo</h1>
