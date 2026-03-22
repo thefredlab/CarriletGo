@@ -285,13 +285,14 @@
         background: rgba(255, 255, 255, 0.8);
     }
 
+    .sidebar:not(.collapsed) .collapseIcon {
+        transform: rotate(180deg);
+    }
+
     .sidebar.collapsed {
         width: 66vw;
         height: calc(var(--header-height, 5em) + 3em);
-    }
-
-    .sidebar:not(.collapsed) .collapseIcon {
-        transform: rotate(180deg);
+        overflow: hidden;
     }
 
     .header {
