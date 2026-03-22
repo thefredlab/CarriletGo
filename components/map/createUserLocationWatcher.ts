@@ -21,7 +21,7 @@ export default function createUserLocationWatcher(
         return;
     }
 
-    let wasInBounds: boolean | undefined = undefined;
+    let wasInBounds: boolean | undefined = true;
 
     return navigator.geolocation.watchPosition(
         (position) => {
