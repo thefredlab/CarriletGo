@@ -3,7 +3,7 @@ import stops from "@/data/stops";
 
 import mapboxgl from "mapbox-gl";
 
-import type { ReactNode, Dispatch } from "react";
+import type { Dispatch, SetStateAction } from "react";
 
 /**
  * Creates stop markers on the map and attaches relevant event handlers for user interaction.
@@ -14,7 +14,7 @@ import type { ReactNode, Dispatch } from "react";
  */
 export default function createStopMarkings(
     map: mapboxgl.Map,
-    selectedStopID?: Dispatch<React.SetStateAction<number | undefined>>
+    selectedStopID?: Dispatch<SetStateAction<number | undefined>>
 ) {
     const checkedStops = preCheckStopMarkerCollision(stops);
 
