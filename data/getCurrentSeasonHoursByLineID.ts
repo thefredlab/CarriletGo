@@ -21,22 +21,26 @@ export default function getCurrentSeasonHoursByLineID(lineID: string): Array<{ s
     // July 11th to August 31st
     const isJulyToAugust =
         (currentDate.getMonth() === 6 && currentDate.getDate() >= 11) ||
-        (currentDate.getMonth() === 7 && currentDate.getDate() < 31);
+        (currentDate.getMonth() === 7 && currentDate.getDate() <= 31);
 
     if (lineID === "yellow" || lineID === "blue") {
         // Specific date checkpoints
         // Easter season
         const easterSeasonStart = getMaundyThursdayDate(),
-            easterSeasonEnd = new Date(easterSeasonStart.getDate() + 5),
-            isEasterSeason =
-                currentDate >= easterSeasonStart &&
-                currentDate <= easterSeasonEnd;
+            easterSeasonEnd = new Date(easterSeasonStart);
+
+        easterSeasonEnd.setDate(easterSeasonEnd.getDate() + 5);
+
+        const isEasterSeason =
+            currentDate >= easterSeasonStart &&
+            currentDate <= easterSeasonEnd;
 
         // Weekends from April to June
         const isWeekendAprilToJune =
             (currentDate.getDay() === 0 || currentDate.getDay() === 5 || currentDate.getDay() === 6) &&
-            (currentDate.getMonth() >= 3 ||
-                (currentDate.getMonth() <= 5 && currentDate.getDate() < 11));
+            (currentDate.getMonth() === 3 ||
+                currentDate.getMonth() === 4 ||
+                (currentDate.getMonth() === 5 && currentDate.getDate() < 11));
 
         // September 1st to September 15th
         const isSeptember =

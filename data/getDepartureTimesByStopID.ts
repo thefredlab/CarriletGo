@@ -58,17 +58,14 @@ export default function getDepartureTimesByStopID(
     }
 
     const formatted: string[] = [],
-        date = new Date();
+        date = new Date(),
+        currentHour = date.getHours() === 0 ? 24 : date.getHours(),
+        manipulatedLastHour = timetable.lastHour === 0 ? 24 : timetable.lastHour;
 
     // If the current hour is between the first and last hour of the timetable, use that hour, else use first hour (last hour could be 0 for 24h)
-    const forLoopFirstHour =
-            (date.getHours() >= timetable.firstHour &&
-                date.getHours() <= timetable.lastHour) ||
-            (timetable.lastHour === 0 &&
-                (date.getHours() === 0 || date.getHours() === 23))
-                ? date.getHours()
-                : timetable.firstHour,
-        forLoopLastHour = timetable.lastHour === 0 ? 24 : timetable.lastHour;
+    const forLoopFirstHour = (
+        currentHour >= timetable.firstHour && currentHour <= manipulatedLastHour) ?
+        currentHour : timetable.firstHour;
 
     const seasonHours = checkSeason ? getCurrentSeasonHoursByLineID(line?.lineID) : [];
 
@@ -80,7 +77,7 @@ export default function getDepartureTimesByStopID(
         };
     }
 
-    for (let i = forLoopFirstHour; i <= forLoopLastHour; i++) {
+    for (let i = forLoopFirstHour; i <= manipulatedLastHour; i++) {
         const formattedTime = new Date(
             date.getFullYear(),
             date.getMonth(),
@@ -90,10 +87,11 @@ export default function getDepartureTimesByStopID(
         );
 
         if (seasonHours.length > 0) {
-            const currentHour = formattedTime.getHours();
+            const currentHour = formattedTime.getHours() === 0 ? 24 : formattedTime.getHours();
+
             const isInsideSeasonHours = seasonHours.some((season) => {
-                const startHour = season.startHour;
-                const lastHour = season.lastHour === 0 ? 24 : season.lastHour;
+                const startHour = season.startHour,
+                    lastHour = season.lastHour === 0 ? 24 : season.lastHour;
 
                 return currentHour >= startHour && currentHour <= lastHour;
             });
