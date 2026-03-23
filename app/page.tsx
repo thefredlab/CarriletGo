@@ -17,8 +17,9 @@ import Sidebar from "@/components/sidebar/Sidebar";
 import getNearestStop from "@/components/nav/getNearestStop";
 import getCheapestRoute from "@/components/nav/getCheapestRoute";
 
-// Other components
-import PopUp from "@/components/PopUp";
+// PopUp components
+import PopUp from "@/components/popup/PopUp";
+import StopInfoPopUp from "@/components/popup/StopInfoPopUp";
 
 // Utils
 import useWindowSize from "@/utils/useWindowSize";
@@ -41,19 +42,17 @@ export default function Page() {
         [destination, setDestination] = useState<any>(null),
         [currentRoute, setCurrentRoute] = useState<number[]>([]),
         [navError, setNavError] = useState<string>(""),
-        [selectedStop, setSelectedStop] = useState<{
-            name?: string;
-            id?: number;
-            content?: React.ReactNode;
-        }>({});
+        [selectedStopID, setSelectedStopID] = useState<number>();
+
+    // Other
+    const [popUpClose, setPopUpClose] = useState<boolean>(true);
 
     // Init useStates
     const [map, setMap] = useState<mapboxgl.Map | null>(null),
         [userLocation, setUserLocation] = useState({
             lat: 0,
             lng: 0
-        }),
-        [popUpClose, setPopUpClose] = useState<boolean>(true);
+        });
 
     useEffect(() => {
         if (!mapContainer.current) return;
@@ -122,7 +121,7 @@ export default function Page() {
         map.on("load", () => {
             console.log("[initMap]", "Map has loaded.");
 
-            createStopMarkings(map, setSelectedStop, setStart, setDestination);
+            createStopMarkings(map, setSelectedStopID);
             createUserLocationMarking(map, userLocation)();
 
             // Set the map center to the user location
@@ -218,8 +217,12 @@ export default function Page() {
     }, [start, destination]);
 
     useEffect(() => {
-        if (selectedStop.name && selectedStop.content) setPopUpClose(false);
-    }, [selectedStop]);
+        if (selectedStopID) setPopUpClose(false);
+    }, [selectedStopID]);
+
+    useEffect(() => {
+        if (popUpClose) setSelectedStopID(undefined);
+    }, [popUpClose]);
 
     return (
         <>
@@ -241,12 +244,19 @@ export default function Page() {
                 <MapStyleSwitch setMapStyle={setMapStyle} />
             </div>
 
-            {selectedStop?.name && selectedStop?.content && !popUpClose && (
+            {selectedStopID && !popUpClose && (
                 <PopUp
-                    content={selectedStop.content}
+                    content={
+                        <StopInfoPopUp
+                            stopID={selectedStopID ?? 0}
+                            setStart={setStart}
+                            setDestination={setDestination}
+                        />
+                    }
                     popUpCloseRequest={setPopUpClose}
                 />
             )}
+
             <div ref={mapContainer} className={styles.mapContainer}></div>
         </>
     );

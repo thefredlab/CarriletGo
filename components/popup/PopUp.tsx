@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { X } from "lucide-react";
 
-import styles from "@/components/PopUp.module.css";
+import styles from "./PopUp.module.css";
 
 /**
  * Renders a pop-up component with specified content and a close functionality.

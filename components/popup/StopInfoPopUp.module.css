@@ -16,13 +16,6 @@
     font-size: 2.5em;
 }
 
-.hr {
-    display: none;
-    width: 90%;
-    margin: 1em 0 2em;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-}
-
 /* Content */
 .timetable {
     display: flex;
