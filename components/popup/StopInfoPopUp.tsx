@@ -33,7 +33,7 @@ export default function StopInfoPopUp({ stopID, setStart, setDestination }: {
             <Image
                 className={styles.stopIcon}
                 src={`/stops/${stopID}.png`}
-                alt={stopID.toString()}
+                alt={stop.name ?? stop.customName ?? stopID.toString()}
                 width={100}
                 height={100}
             />
