@@ -37,7 +37,7 @@ export default function getDepartureTimesByStopID(
             : getLineByStopID(stopID),
         timetable = line?.timetable?.timetable[stopID];
 
-    if (!timetable) return { formatted: [], unformatted: [] };
+    if (!timetable || !line) return { formatted: [], unformatted: [] };
 
     const unformatted: Date[] = [];
 
@@ -67,7 +67,7 @@ export default function getDepartureTimesByStopID(
         currentHour >= timetable.firstHour && currentHour <= manipulatedLastHour) ?
         currentHour : timetable.firstHour;
 
-    const seasonHours = checkSeason ? getCurrentSeasonHoursByLineID(line?.lineID) : [];
+    const seasonHours = checkSeason ? getCurrentSeasonHoursByLineID(line.lineID) : [];
 
     if (checkSeason && seasonHours.length === 0) {
         return {
