@@ -1,34 +1,20 @@
 import preCheckStopMarkerCollision from "@/components/map/preCheckStopMarkerCollision";
-import getDepartureTimesByStopID from "@/data/getDepartureTimesByStopID";
 import stops from "@/data/stops";
 
 import mapboxgl from "mapbox-gl";
-import Image from "next/image";
 
-import styles from "./CreateStopMarkings.module.css";
-
-import type { ReactNode, Dispatch } from "react";
+import type { Dispatch, SetStateAction } from "react";
 
 /**
  * Creates stop markers on the map and attaches relevant event handlers for user interaction.
  *
  * @param {mapboxgl.Map} map - The Mapbox GL map instance where the stop markers will be rendered.
- * @param {Dispatch<React.SetStateAction<{name?: string, id?: number, content?: ReactNode}>>} [setSelectedStop] - Optional function to set the currently selected stop and its details.
- * @param {Dispatch<React.SetStateAction<any>>} [setStart] - Optional function to update the start location for a journey.
- * @param {Dispatch<React.SetStateAction<any>>} setDestination - Function to update the destination location for a journey.
+ * @param selectedStopID - Optional function to handle the selection of a stop.
  * @return {void} This function does not return a value but modifies the map instance by adding stop markers.
  */
 export default function createStopMarkings(
     map: mapboxgl.Map,
-    setSelectedStop?: Dispatch<
-        React.SetStateAction<{
-            name?: string;
-            id?: number;
-            content?: ReactNode;
-        }>
-    >,
-    setStart?: Dispatch<React.SetStateAction<any>>,
-    setDestination?: Dispatch<React.SetStateAction<any>>
+    selectedStopID?: Dispatch<SetStateAction<number | undefined>>
 ) {
     const checkedStops = preCheckStopMarkerCollision(stops);
 
@@ -75,83 +61,7 @@ export default function createStopMarkings(
                 essential: true
             });
 
-            const departures = getDepartureTimesByStopID(i);
-
-            setSelectedStop?.({
-                name: stop.name ?? stop.customName,
-                id: i,
-                content: (
-                    <>
-                        <header className={styles.heading}>
-                            <Image
-                                className={styles.stopIcon}
-                                src={`/stops/${i}.png`}
-                                alt={i.toString()}
-                                width={100}
-                                height={100}
-                            />
-                            <h2 className={styles.title}>
-                                {stop.name ?? stop.customName}
-                            </h2>
-                        </header>
-
-                        <h1 className={styles.timetableTitle}>
-                            Next Departures
-                        </h1>
-                        <div className={styles.timetable}>
-                            {departures && departures.formatted.length > 0 ? (
-                                departures.formatted.map((time, i) => (
-                                    <span
-                                        key={time + i}
-                                        className={styles.departure}
-                                    >
-                                        {time}
-                                    </span>
-                                ))
-                            ) : (
-                                <p className={styles.noTimetable}>
-                                    Sorry, we couldn&apos;t find any departures
-                                    for this stop. Please try again later.
-                                </p>
-                            )}
-                        </div>
-
-                        <hr className={styles.hr} />
-
-                        {setStart && setDestination && (
-                            <div className={styles.buttons}>
-                                <div
-                                    className={styles.button}
-                                    onClick={() => {
-                                        setStart({
-                                            name: stop.customName || stop.name,
-                                            address: {},
-                                            lat: stop.location.lat,
-                                            lng: stop.location.lng
-                                        });
-                                    }}
-                                >
-                                    Set as Start
-                                </div>
-
-                                <div
-                                    className={styles.button}
-                                    onClick={() =>
-                                        setDestination({
-                                            name: stop.customName || stop.name,
-                                            address: {},
-                                            lat: stop.location.lat,
-                                            lng: stop.location.lng
-                                        })
-                                    }
-                                >
-                                    Set as Destination
-                                </div>
-                            </div>
-                        )}
-                    </>
-                )
-            });
+            selectedStopID?.(i);
         });
 
         new mapboxgl.Marker(ele)
