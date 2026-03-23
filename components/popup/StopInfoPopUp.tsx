@@ -15,6 +15,19 @@ export default function StopInfoPopUp({ stopID, setStart, setDestination }: {
     const stop = getStopByID(stopID),
         departures = getDepartureTimesByStopID(stopID);
 
+    function setLocation(type: "start" | "destination") {
+        if (!setStart || !setDestination) return;
+
+        const set = type === "start" ? setStart : setDestination;
+
+        set({
+            name: stop.customName || stop.name,
+            address: {},
+            lat: stop.location.lat,
+            lng: stop.location.lng
+        });
+    }
+
     return <>
         <header className={styles.heading}>
             <Image
@@ -55,28 +68,28 @@ export default function StopInfoPopUp({ stopID, setStart, setDestination }: {
             <div className={styles.buttons}>
                 <div
                     className={styles.button}
-                    onClick={() => {
-                        setStart({
-                            name: stop.customName || stop.name,
-                            address: {},
-                            lat: stop.location.lat,
-                            lng: stop.location.lng
-                        });
+                    onClick={() => setLocation("start")}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                            setLocation("start");
+                        }
                     }}
+                    role={"button"}
+                    tabIndex={0}
                 >
                     Set as Start
                 </div>
 
                 <div
                     className={styles.button}
-                    onClick={() =>
-                        setDestination({
-                            name: stop.customName || stop.name,
-                            address: {},
-                            lat: stop.location.lat,
-                            lng: stop.location.lng
-                        })
-                    }
+                    onClick={() => setLocation("destination")}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                            setLocation("destination");
+                        }
+                    }}
+                    role={"button"}
+                    tabIndex={0}
                 >
                     Set as Destination
                 </div>
