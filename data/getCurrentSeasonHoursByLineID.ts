@@ -35,7 +35,7 @@ export default function getCurrentSeasonHoursByLineID(lineID: string): Array<{ s
             currentDate >= easterSeasonStart &&
             currentDate <= easterSeasonEnd;
 
-        // Weekends from April to June
+        // Weekends (FRI-SUN) from April to June
         const isWeekendAprilToJune =
             (currentDate.getDay() === 0 || currentDate.getDay() === 5 || currentDate.getDay() === 6) &&
             (currentDate.getMonth() === 3 ||
