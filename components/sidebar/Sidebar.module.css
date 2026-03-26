@@ -314,6 +314,7 @@
 
     .searchField {
         max-width: 100%;
+        min-width: 95%;
     }
 
     .button {
