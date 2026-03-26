@@ -1,8 +1,9 @@
-import { useState, useRef, useEffect } from "react";
+import { Dispatch, SetStateAction, useState, useRef, useEffect } from "react";
 import { ArrowDownUp, ChevronUp } from "lucide-react";
 
 import SearchResults from "@/components/sidebar/SearchResults";
 import RouteStops from "@/components/sidebar/RouteStops";
+import DateSwitcher from "@/components/sidebar/DateSwitcher";
 
 import getStopByID from "@/data/getStopByID";
 
@@ -12,19 +13,23 @@ import useWindowSize from "@/utils/useWindowSize";
 import styles from "./Sidebar.module.css";
 
 export default function Sidebar({
-    userLocation,
-    start,
-    setStart,
-    destination,
-    setDestination,
-    currentRoute,
-    errorMessage
-}: {
+                                    userLocation,
+                                    start,
+                                    setStart,
+                                    destination,
+                                    setDestination,
+                                    activeDate,
+                                    setActiveDate,
+                                    currentRoute,
+                                    errorMessage
+                                }: {
     userLocation: { lat: number; lng: number };
     start: any;
-    setStart: React.Dispatch<React.SetStateAction<any>>;
+    setStart: Dispatch<SetStateAction<any>>;
     destination: any;
-    setDestination: React.Dispatch<React.SetStateAction<any>>;
+    setDestination: Dispatch<SetStateAction<any>>;
+    activeDate: Date | undefined;
+    setActiveDate: Dispatch<SetStateAction<Date | undefined>>;
     currentRoute: number[];
     errorMessage: string;
 }) {
@@ -69,7 +74,7 @@ export default function Sidebar({
             } else
                 setStart(null);
         }
-    }, [userLocation]);
+    }, [currentRoute, setStart, start, userLocation]);
 
     useEffect(() => {
         if (!windowSize.width) return;
@@ -124,7 +129,7 @@ export default function Sidebar({
 
             autoCompleteAddress(
                 inputValue,
-                { lat: userLocation.lat, lng: userLocation.lng },
+                {lat: userLocation.lat, lng: userLocation.lng},
                 (results) => {
                     searchResults.push(...results);
 
@@ -224,7 +229,7 @@ export default function Sidebar({
                     </div>
 
                     <div className={styles.button}>
-                        <ChevronUp className={styles.collapseIcon} />
+                        <ChevronUp className={styles.collapseIcon}/>
                     </div>
                 </div>
 
@@ -303,6 +308,10 @@ export default function Sidebar({
                     />
                 </div>
 
+                <div className={styles.dateSwitcher}>
+                    <DateSwitcher activeDate={activeDate} setActiveDate={setActiveDate}/>
+                </div>
+
                 {searchResults.length === 0 && errorMessage.length > 0 && (
                     <div className={styles.errorMessage}>{errorMessage}</div>
                 )}
@@ -319,6 +328,7 @@ export default function Sidebar({
                     <RouteStops
                         currentRoute={currentRoute}
                         searchResults={searchResults}
+                        date={activeDate}
                     />
                 </div>
 

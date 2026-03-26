@@ -130,6 +130,11 @@
     border-radius: 1em;
 }
 
+/* Date Switcher */
+.dateSwitcher {
+    margin-bottom: 1em;
+}
+
 /* Search results */
 .searchResult {
     display: flex;

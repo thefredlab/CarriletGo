@@ -44,7 +44,8 @@ export default function Page() {
         [destination, setDestination] = useState<any>(null),
         [currentRoute, setCurrentRoute] = useState<number[]>([]),
         [navError, setNavError] = useState<string>(""),
-        [selectedStopID, setSelectedStopID] = useState<number>();
+        [selectedStopID, setSelectedStopID] = useState<number>(),
+        [activeDate, setActiveDate] = useState<Date | undefined>();
 
     // Other
     const [popUpClose, setPopUpClose] = useState<boolean>(true);
@@ -105,7 +106,7 @@ export default function Page() {
                 newContainer.appendChild(logoElement);
             }
         });
-    }, [windowSize]);
+    }, [map, windowSize]);
 
     useEffect(() => {
         if (!map) {
@@ -230,13 +231,13 @@ export default function Page() {
                     setStart={setStart}
                     destination={destination}
                     setDestination={setDestination}
+                    activeDate={activeDate}
+                    setActiveDate={setActiveDate}
                     currentRoute={currentRoute}
                     errorMessage={navError}
                 />
             </div>
-            {/*<div className={styles.navigatorContainer}>*/}
-            {/*    <Navigator />*/}
-            {/*</div>*/}
+
             <div className={styles.topRightContainer}>
                 <UserLocationButton setUserLocation={setUserLocation} userLocation={userLocation} />
                 <MapStyleSwitch setMapStyle={setMapStyle} />
@@ -247,6 +248,7 @@ export default function Page() {
                     content={
                         <StopInfoPopUp
                             stopID={selectedStopID ?? 0}
+                            date={activeDate}
                             setStart={setStart}
                             setDestination={setDestination}
                         />

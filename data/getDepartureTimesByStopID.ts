@@ -8,6 +8,7 @@ import lines from "@/data/lines";
  *
  * @param {number} stopID - The ID of the stop for which departure times are to be retrieved.
  * @param {string} [lineID] - An optional ID of the line to narrow down the search for the timetable.
+ * @param {Date} [date=""] - An optional date to determine the current hour for filtering departure times. If not provided, the current date and time will be used.
  * @param {boolean} [checkSeason=true] - Whether to check if the current hour is within the season hours for the specified line.
  * @returns {{
  *     formatted: string[];
@@ -22,6 +23,7 @@ import lines from "@/data/lines";
 export default function getDepartureTimesByStopID(
     stopID: number,
     lineID?: string,
+    date?: Date,
     checkSeason: boolean = true
 ): {
     formatted: string[];
@@ -37,7 +39,7 @@ export default function getDepartureTimesByStopID(
             : getLineByStopID(stopID),
         timetable = line?.timetable?.timetable[stopID];
 
-    if (!timetable || !line) return { formatted: [], unformatted: [] };
+    if (!timetable || !line) return {formatted: [], unformatted: []};
 
     const unformatted: Date[] = [];
 
@@ -58,8 +60,8 @@ export default function getDepartureTimesByStopID(
     }
 
     const formatted: string[] = [],
-        date = new Date(),
-        currentHour = date.getHours() === 0 ? 24 : date.getHours(),
+        currentDate = date ?? new Date(),
+        currentHour = currentDate.getHours() === 0 ? 24 : currentDate.getHours(),
         manipulatedLastHour = timetable.lastHour === 0 ? 24 : timetable.lastHour;
 
     // If the current hour is between the first and last hour of the timetable, use that hour, else use first hour (last hour could be 0 for 24h)
@@ -67,7 +69,7 @@ export default function getDepartureTimesByStopID(
         currentHour >= timetable.firstHour && currentHour <= manipulatedLastHour) ?
         currentHour : timetable.firstHour;
 
-    const seasonHours = checkSeason ? getCurrentSeasonHoursByLineID(line.lineID) : [];
+    const seasonHours = checkSeason ? getCurrentSeasonHoursByLineID(line.lineID, date) : [];
 
     if (checkSeason && seasonHours.length === 0) {
         return {
@@ -79,9 +81,9 @@ export default function getDepartureTimesByStopID(
 
     for (let i = forLoopFirstHour; i <= manipulatedLastHour; i++) {
         const formattedTime = new Date(
-            date.getFullYear(),
-            date.getMonth(),
-            date.getDate(),
+            currentDate.getFullYear(),
+            currentDate.getMonth(),
+            currentDate.getDate(),
             i,
             timetable.min
         );

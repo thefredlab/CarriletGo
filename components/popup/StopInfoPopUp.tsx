@@ -7,13 +7,14 @@ import styles from "./StopInfoPopUp.module.css";
 
 import type { Dispatch, SetStateAction } from "react";
 
-export default function StopInfoPopUp({ stopID, setStart, setDestination }: {
+export default function StopInfoPopUp({stopID, date, setStart, setDestination}: {
     stopID: number;
+    date?: Date;
     setStart?: Dispatch<SetStateAction<any>>,
     setDestination?: Dispatch<SetStateAction<any>>
 }) {
     const stop = getStopByID(stopID),
-        departures = getDepartureTimesByStopID(stopID);
+        departures = getDepartureTimesByStopID(stopID, undefined, date);
 
     function setLocation(type: "start" | "destination") {
         if (!setStart || !setDestination) return;
@@ -43,7 +44,7 @@ export default function StopInfoPopUp({ stopID, setStart, setDestination }: {
         </header>
 
         <h1 className={styles.timetableTitle}>
-            Next Departures
+            {date ? `Departures on ${date.toLocaleDateString()}` : "Next Departures"}
         </h1>
 
         <div className={styles.timetable}>

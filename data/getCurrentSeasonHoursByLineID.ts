@@ -5,12 +5,16 @@ import getMaundyThursdayDate from "@/utils/getMaundyThursdayDate";
  * The method calculates seasonal hours considering various time periods, public holidays, and weekends.
  *
  * @param {string} lineID - The unique identifier for the line. Examples include "yellow" or "blue".
+ * @param {Date} [date] - Optional parameter to specify a specific date. If not provided, the current date is used.
  *
  * @return {Array<{startHour: number, lastHour: number}>} Returns an array with one object if there's no break. If there's a break, it returns an array with two objects.
  * Each object specifies the startHour and lastHour. An empty array is returned if no hours are applicable.
  */
-export default function getCurrentSeasonHoursByLineID(lineID: string): Array<{ startHour: number; lastHour: number; }> {
-    const currentDate = new Date();
+export default function getCurrentSeasonHoursByLineID(lineID: string, date?: Date): Array<{
+    startHour: number;
+    lastHour: number;
+}> {
+    const currentDate = date ?? new Date();
 
     // General data checkpoints
     // June 11th to July 10th
@@ -26,7 +30,7 @@ export default function getCurrentSeasonHoursByLineID(lineID: string): Array<{ s
     if (lineID === "yellow" || lineID === "blue") {
         // Specific date checkpoints
         // Easter season
-        const easterSeasonStart = getMaundyThursdayDate(),
+        const easterSeasonStart = getMaundyThursdayDate(currentDate.getFullYear()),
             easterSeasonEnd = new Date(easterSeasonStart);
 
         easterSeasonEnd.setDate(easterSeasonEnd.getDate() + 5);

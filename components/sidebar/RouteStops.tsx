@@ -9,10 +9,12 @@ import styles from "@/components/sidebar/Sidebar.module.css";
 
 export default function RouteStops({
     currentRoute,
-    searchResults
+    searchResults,
+    date
 }: {
     currentRoute: number[];
     searchResults: any[];
+    date?: Date;
 }) {
     return (
         <>
@@ -30,7 +32,8 @@ export default function RouteStops({
                     const currentStop = getStopByID(stopID),
                         departureTimes = getDepartureTimesByStopID(
                             stopID,
-                            currentStopLine?.lineID
+                            currentStopLine?.lineID,
+                            date
                         );
 
                     return (
